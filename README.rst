@@ -5,7 +5,7 @@ DeepXF: Explainable Forecasting and Nowcasting with State-of-the-art Deep Neural
 
 pypi: https://pypi.org/project/deep_xf
 
-.. image:: figures/logo.png
+.. image:: images/logo.png
 
 
 About deep-xf
@@ -13,7 +13,7 @@ About deep-xf
 
 `DeepXF` is an open source, low-code python library for forecasting and nowcasting tasks. `DeepXF` helps in designing complex forecasting and nowcasting models with built-in utility for time series data. One can automatically build interpretable deep forecasting and nowcasting models at ease with this `simple`, `easy-to-use` and `low-code` solution. It enables users to perform end-to-end Proof-Of-Concept (POC) quickly and efficiently. One can build models based on deep neural network such as Recurrent Neural Network (RNN), Long Short Term Memory (LSTM), Gated Recurrent Unit (GRU), Bidirectional RNN/LSTM/GRU (BiRNN/BiLSTM/BiGRU), Spiking Neural Network (SNN), Graph Neural Network (GNN), Transformers, Generative Adversarial Network (GAN), Convolutional Neural Network (CNN), and others. It also provides facility to build nowcast model using Dynamic Factor Model. 
 
-.. image:: figures/representation.png
+.. image:: images/representation.png
 
 `DeepXF` is conceived and developed by Ajay Arunachalam - https://www.linkedin.com/in/ajay-arunachalam-4744581a/
 
@@ -250,8 +250,8 @@ Tested Demo
 ===========
 ## Important Links
 ------------------
-- Find the notebook of the forecasting demo here : https://github.com/ajayarunachalam/pynmsnn/blob/main/pyNM/spiking-multiclass-classifier-model.ipynb
-- Find the notebook of the nowcasting demo here : https://github.com/ajayarunachalam/pynmsnn/blob/main/pyNM/spiking-multiclass-classifier-model.ipynb
+- Find the forecasting demo here : https://github.com/ajayarunachalam/Deep_XF/blob/main/demo_notebook/Forecast-Demo.py
+- Find the notebook of the nowcasting demo here : https://github.com/ajayarunachalam/Deep_XF/blob/main/demo_notebook/Nowcast-Demo.ipynb
 
 
 License
