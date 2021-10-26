@@ -1,0 +1,31 @@
+# Library dependencies for the python code.  You need to install these with
+
+# conda create -n <env_name> python=3.6 (or 3.7)
+# source activate <env_name>
+# run requirements
+# python -m ipykernel install --user --name <env_name> --display-name "<Display Name>"
+
+# `pip install -U -r requirements.txt` before you can run this.
+
+# Base libraries
+numpy
+pandas
+scipy
+tqdm
+
+# Viz libs
+matplotlib
+seaborn==0.9.0
+pandas_profiling
+py-ecg-detectors
+
+# Stats libraries
+scikit-learn>=0.24.0
+statsmodels==0.12.2
+
+# model interpretation library
+shap
+
+# dl frameworks
+torch
+keras
