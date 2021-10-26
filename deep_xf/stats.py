@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 25/10/2021
 Goal: Explainable Nowcasting with Dynamic Factor Model based on EM algorithm
-Version: 0.0.1
+Version: 0.0.3
 """
 
 import statsmodels.api as sm

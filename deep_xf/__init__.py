@@ -20,7 +20,7 @@ from .similarity import *
 
 #################################################################################
 module_type = 'Running' if  __name__ == "__main__" else 'Imported'
-version_number = '0.0.1'
+version_number = '0.0.3'
 print(f"""{module_type} DeepXF version:{version_number}. Example call by using:
 
 ***********************   SET MODEL/BASE CONFIGURATIONS   ************************

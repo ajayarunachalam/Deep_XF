@@ -3,7 +3,7 @@
 @author: Ajay Arunachalam
 Created on: 11/10/2021
 Goal: Denoising time-series ecg signals
-Version: 0.0.1
+Version: 0.0.3
 """
 from scipy import signal
 from scipy.signal import butter, iirnotch, lfilter

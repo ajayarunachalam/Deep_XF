@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 25/10/2021
 Training the forecasting and Nowcasting model
-Version: 0.0.1
+Version: 0.0.3
 """
 
 

@@ -5,7 +5,7 @@
 # run requirements
 # python -m ipykernel install --user --name <env_name> --display-name "<Display Name>"
 
-# `pip install -U -r requirements.txt` before you can run this.
+# `pip install -U -r requirements.txt --ignore-installed` before you can run this.
 
 # Base libraries
 numpy
@@ -17,14 +17,15 @@ tqdm
 matplotlib
 seaborn==0.9.0
 pandas_profiling
-py-ecg-detectors
+py-ecg-detectors [--user]
 
 # Stats libraries
 scikit-learn>=0.24.0
 statsmodels==0.12.2
 
+
 # model interpretation library
-shap
+shap==0.39.0
 
 # dl frameworks
 torch
