@@ -13,7 +13,7 @@ except ImportError:
     from distutils.core import setup
 
 
-__version__ = '0.0.3'
+__version__ = '0.0.4'
 
 def readme():
     with open('README.rst', 'r', encoding='utf-8') as f:
