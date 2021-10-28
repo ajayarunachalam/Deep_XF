@@ -49,8 +49,8 @@ class Forecast:
 
 		return ts, fc
 
-		assert ts == ts
-		assert fc == fc
+	assert ts == ts
+	assert fc == fc
 
 	def set_model_config(**kwargs):
 
@@ -64,10 +64,10 @@ class Forecast:
 
 		return select_model, select_user_path, select_scaler, forecast_window
 
-		assert select_model == select_model
-		assert select_user_path == select_user_path
-		assert select_scaler == select_scaler
-		assert forecast_window ==  forecast_window
+	assert select_model == select_model
+	assert select_user_path == select_user_path
+	assert select_scaler == select_scaler
+	assert forecast_window ==  forecast_window
 
 	def hyperparameter_config(**kwargs):
 
@@ -84,13 +84,13 @@ class Forecast:
 
 		return hidden_dim, layer_dim, batch_size, dropout, n_epochs, learning_rate, weight_decay
 
-		assert hidden_dim == hidden_dim
-		assert layer_dim == layer_dim
-		assert batch_size == batch_size
-		assert dropout == dropout
-		assert n_epochs == n_epochs
-		assert learning_rate == learning_rate
-		assert weight_decay == weight_decay
+	assert hidden_dim == hidden_dim
+	assert layer_dim == layer_dim
+	assert batch_size == batch_size
+	assert dropout == dropout
+	assert n_epochs == n_epochs
+	assert learning_rate == learning_rate
+	assert weight_decay == weight_decay
 
 	def forecast(df, ts, fc, opt, scaler, period:int, fq:str, select_scaler=select_scaler, ):
 

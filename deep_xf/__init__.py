@@ -20,7 +20,7 @@ from .similarity import *
 
 #################################################################################
 module_type = 'Running' if  __name__ == "__main__" else 'Imported'
-version_number = '0.0.3'
+version_number = '0.0.4'
 print(f"""{module_type} DeepXF version:{version_number}. Example call by using:
 
 ***********************   SET MODEL/BASE CONFIGURATIONS   ************************
@@ -60,7 +60,20 @@ nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc,
 
 EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
 
+***********************   DENOISING TIMESERIES ECG SIGNALS   **********************
+
+fs, order, cutoff_high, cutoff_low, powerline, nyq = Denoise.set_parameters(fs = 500, order = 5, cutoff_high = 0.5, cutoff_low = 2, powerline = 60)
+Denoise.plot_and_write(ecg_signal_data, featurecol_index=2, fs=fs, cutoff_high=cutoff_high, cutoff_low=cutoff_low, nyq = nyq, powerline=powerline, order=order)
+
+
+***********************   TIMESERIES ECG SIGNAL SIMILARITY   **********************
+
+sm = Siamese.Siamese_Model(5) #5 - #number of features
+sm.compile(loss='mse', optimizer='adam', metrics=['mse', 'mae', 'mape', 'cosine'])
+score = sm(inputs=[np.array(activity_input_sequence_1), np.array(activity_input_sequence_2)]) #timeseries sequence1   #timeseries sequence2
+
 """)
+
 
 
 
