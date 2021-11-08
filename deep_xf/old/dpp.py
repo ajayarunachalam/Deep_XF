@@ -3,7 +3,7 @@
 @author: Ajay Arunachalam
 Created on: 04/10/2021
 Goal: Data Preprocessing for Time-series data 
-Version: 0.0.5
+Version: 0.0.3
 """
 
 import numpy as np
@@ -132,7 +132,7 @@ class ExploratoryDataAnalysis:
 
 
 	# plot with plotly
-	def plot_dataset(df, fc, title):
+	def plot_dataset(df, title):
 		import plotly.graph_objs as go
 		from plotly.offline import iplot
 		data = []
@@ -149,8 +149,8 @@ class ExploratoryDataAnalysis:
 
 		layout = dict(
 			title=title,
-			xaxis=dict(title=f"{df.index.name}", ticklen=5, zeroline=False),
-			yaxis=dict(title=f"{fc}", ticklen=5, zeroline=False),
+			xaxis=dict(title="Date", ticklen=5, zeroline=False),
+			yaxis=dict(title="Value", ticklen=5, zeroline=False),
 		)
 
 		fig = dict(data=data, layout=layout)

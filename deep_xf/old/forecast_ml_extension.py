@@ -2,13 +2,14 @@
 
 """
 @author: Ajay Arunachalam
-Created on: 20/10/2021
-Goal: Deep Explainable Forecasting with SOTA Networks for Time-series data - RNN, LSTM, GRU, BiRNN, SNN, GNN, Transformers, GAN, FFNN, etc
-Version: 0.0.5
+Created on: 23/10/2021
+Goal: Deep Explainable Forecasting with State-Of-the-Networks for Time-series data - RNN, LSTM, GRU, BiRNN, SNN, GNN, Transformers, GAN, FFNN, etc
+Version: 0.0.3
 """
 
 import torch
 import torch.nn as nn
+import statsmodels.api as sm
 from .gnn_layer import *
 
 
@@ -230,9 +231,76 @@ class Forecasting_Models:
 			out = self.fc(out[:, -1, :])
 			return out
 
+	class BiGRUModel(nn.Module):
+		"""BiGRUModel class extends nn.Module class and works as a constructor for GRUs.
+
+		   BiGRUModel class initiates a GRU module based on PyTorch's nn.Module class.
+		   It has only two methods, namely init() and forward(). While the init()
+		   method initiates the model with the given input parameters, the forward()
+		   method defines how the forward propagation needs to be calculated.
+		   Since PyTorch automatically defines back propagation, there is no need
+		   to define back propagation method.
+
+		   Attributes:
+			   hidden_dim (int): The number of nodes in each layer
+			   layer_dim (str): The number of layers in the network
+			   gru (nn.GRU): The GRU model constructed with the input parameters.
+			   fc (nn.Linear): The fully connected layer to convert the final state
+							   of GRUs to our desired output shape.
+
+		"""
+		def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob):
+			"""The __init__ method that initiates a GRU instance.
+
+			Args:
+				input_dim (int): The number of nodes in the input layer
+				hidden_dim (int): The number of nodes in each layer
+				layer_dim (int): The number of layers in the network
+				output_dim (int): The number of nodes in the output layer
+				dropout_prob (float): The probability of nodes being dropped out
+
+			"""
+			super(Forecasting_Models.BiGRUModel, self).__init__()
+
+			# Defining the number of layers and the nodes in each layer
+			self.layer_dim = layer_dim
+			self.hidden_dim = hidden_dim
+
+			# GRU layers
+			self.gru = nn.GRU(
+				input_dim, hidden_dim, layer_dim, batch_first=True, bidirectional=True, dropout=dropout_prob
+			)
+
+			# Fully connected layer
+			self.fc = nn.Linear(hidden_dim*2, output_dim) # 2 for bidirection
+
+		def forward(self, x):
+			"""The forward method takes input tensor x and does forward propagation
+
+			Args:
+				x (torch.Tensor): The input tensor of the shape (batch size, sequence length, input_dim)
+
+			Returns:
+				torch.Tensor: The output tensor of the shape (batch size, output_dim)
+
+			"""
+			# Initializing hidden state for first input with zeros
+			h0 = torch.zeros(self.layer_dim*2, x.size(0), self.hidden_dim).requires_grad_() # 2 for bidirection
+
+			# Forward propagation by passing in the input and hidden state into the model
+			out, _ = self.gru(x, h0.detach())
+
+			# Reshaping the outputs in the shape of (batch_size, seq_length, hidden_size)
+			# so that it can fit into the fully connected layer
+			out = out[:, -1, :]
+
+			# Convert the final state to our desired output shape (batch_size, output_dim)
+			out = self.fc(out)
+
+			return out
+
 	class SNNModel(nn.Module):
 		pass
-
 
 
 	class CNNModel(nn.Module):
@@ -290,10 +358,9 @@ class Forecasting_Models:
 
 		def __init__(self, input_dim, hidden_dim, layer_dim, output_dim, dropout_prob):
 			
-		    # self, in_features = 7, hidden_dim = 64, classes = 2, dropout = 0.5
+		 	# self, in_features = 7, hidden_dim = 64, classes = 2, dropout = 0.5
 
 			super(Forecasting_Models.GNNModel, self).__init__()
-
 
 			# GNN layers
 			self.conv1 = GCN_Layer(input_dim, hidden_dim) # in_features, hidden_dim
@@ -471,7 +538,6 @@ class Forecasting_Models:
 
 	# GNN
 
-
 	# GAN
 
 	class GAN(torch.nn.Module):
@@ -480,9 +546,7 @@ class Forecasting_Models:
 		"""
 		pass
 
-
 	# TRANSFORMER
-
 
 	class TF(torch.nn.Module):
 		"""

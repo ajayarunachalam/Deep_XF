@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 12/10/2021
 Goal: Graph Neural Network Layers
-Version: 0.0.5
+Version: 0.0.3
 """
 import numpy as np
 import torch

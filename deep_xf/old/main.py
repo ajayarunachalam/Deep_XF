@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 25/10/2021
 Training the forecasting and Nowcasting model
-Version: 0.0.5
+Version: 0.0.3
 """
 
 
@@ -19,6 +19,7 @@ from .denoise import *
 from .similarity import *
 from .gnn_layer import *
 from .stats import *
+
 
 class Forecast:
 
@@ -93,9 +94,6 @@ class Forecast:
 
 	def forecast(df, ts, fc, opt, scaler, period:int, fq:str, select_scaler=select_scaler, ):
 
-		digit = ''.join(filter(str.isdigit, str(fq)))
-		interval = int(digit)
-
 		ff_df = Helper.make_future_df(df, ts, period, fq)
 
 		print(f'Forecast period dataframe: {ff_df.index}')
@@ -104,13 +102,7 @@ class Forecast:
 
 		#cols=['hour','month','day','day_of_week','week_of_year']
 
-		frequency = ''.join([i for i in fq if not i.isdigit()])
-
-		#if any(str(frequency).startswith(tuple(l)) for l in ['h', 'H', 's', 'S', 'min', 'MIN', 'n', 'N']) and interval is not None:
-		if frequency in ['h', 'H', 's', 'S', 'min', 'MIN', 'n', 'N'] and interval is not None:
-
-
-		#if str(fq)=='h' or str(fq)=='H' or str(fq) == 's' or str(fq) == 'S' or str(fq) == 'min' or str(fq) == 'MIN' or str(fq) == 'n' or str(fq) == 'N' or interval is not None:  # hourly(h:m:s)
+		if str(fq)=='h' or str(fq)=='H':
 
 			ff_full_features = Features.generate_date_time_features_hour(ff_df, ['hour','month','day','day_of_week','week_of_year'])
 			ff_full_features = Features.generate_cyclic_features(ff_full_features, 'hour', 24, 0)
@@ -120,11 +112,7 @@ class Forecast:
 
 			ff_full_features = Features.generate_other_related_features(df=ff_full_features)
 
-		elif frequency in ['d', 'D', 'w', 'W', 'm', 'M', 'q', 'Q', 'QS', '2q', '2Q', 'HA', 'Y', 'y', 'A'] and interval is not None:
-
-		#elif any(str(frequency).startswith(tuple(l)) for l in ['d', 'D', 'w', 'W', 'm', 'M', 'q', 'Q', 'QS', '2q', '2Q', 'HA', 'Y', 'y', 'A']) and interval is not None:
-
-		#elif str(fq) == 'd' or str(fq) == 'D' or str(fq) == 'w' or str(fq) == 'W' or str(fq)=='m' or str(fq)=='M' or str(fq) == 'q' or str(fq) == 'Q' or str(fq) == 'QS' or str(fq) == '2q' or str(fq) == '2Q' or str(fq) == 'HA' or str(fq) == 'y' or str(fq) == 'Y' or str(fq) == 'A' or interval is not None: # Yearly(Daily, weekly, monthly, quater, semi-annual, annual)
+		elif str(fq)=='m' or str(fq)=='M':
 
 			ff_full_features = Features.generate_date_time_features_month(ff_df, ['month','day_of_week','week_of_year'])
 			ff_full_features = Features.generate_cyclic_features(ff_full_features, 'day_of_week', 7, 0)

@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 20/10/2021
 Goal: Deep Explainable Forecasting with SOTA Networks for Time-series data - RNN, LSTM, GRU, BiRNN, SNN, GNN, Transformers, GAN, FFNN, etc
-Version: 0.0.5
+Version: 0.0.3
 """
 
 import torch

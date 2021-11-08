@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 25/10/2021
 Goal: Explainable Nowcasting with Dynamic Factor Model based on EM algorithm
-Version: 0.0.5
+Version: 0.0.3
 """
 
 import statsmodels.api as sm
@@ -39,35 +39,8 @@ class EMModel():
 		return models.get(model.lower())
 
 
-	# old
-
-	# def make_future_df(df, ts, period:int, fq:str):
-	# 	if str(fq) == 'h' or str(fq) == 'H':
-	# 		#last_date = df[ts].max()
-	# 		last_date = df.index.max()
-	# 		dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-	# 		dates = dates[dates > last_date]  # Drop start if equals last_date
-	# 		dates = dates[:period]  # Return correct number of periods
-	# 		ff = pd.DataFrame({ts:dates})
-	# 		ff.set_index(ts, inplace=True)
-	# 	elif str(fq) == 'm' or str(fq) == 'M':
-	# 		last_date = df.index.max()
-	# 		dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-	# 		dates = dates[dates > last_date]  # Drop start if equals last_date
-	# 		dates = dates[1:period+1]  # Return correct number of periods
-	# 		ff = pd.DataFrame({ts:dates})
-	# 		ff.set_index(ts, inplace=True)
-	# 	return ff
-
-	# revised
-
 	def make_future_df(df, ts, period:int, fq:str):
-		#last_date = df.index.max()
-		#dates = pd.date_range(start=last_date, periods=period + 1, freq=fq)
-		#assert dates == dates
-		digit = ''.join(filter(str.isdigit, str(fq)))
-		interval = int(digit)
-		if str(fq) == 'h' or str(fq) == 'H' or interval is not None:  # hourly
+		if str(fq) == 'h' or str(fq) == 'H':
 			#last_date = df[ts].max()
 			last_date = df.index.max()
 			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
@@ -75,87 +48,27 @@ class EMModel():
 			dates = dates[:period]  # Return correct number of periods
 			ff = pd.DataFrame({ts:dates})
 			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'm' or str(fq) == 'M' or interval is not None: # monthly
+		elif str(fq) == 'm' or str(fq) == 'M':
 			last_date = df.index.max()
 			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
 			dates = dates[dates > last_date]  # Drop start if equals last_date
 			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'd' or str(fq) == 'D' or interval is not None: # daily
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'w' or str(fq) == 'W' or interval is not None: # weekly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'min' or str(fq) == 'MIN' or interval is not None: # minute
-			last_date = df.index.max()
-			diff_min = (df.index.minute[1] - df.index.minute[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 's' or str(fq) == 'S' or interval is not None: # second
-			last_date = df.index.max()
-			diff_sec = (df.index.second[1] - df.index.second[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'n' or str(fq) == 'N' or interval is not None: # millisecond
-			last_date = df.index.max()
-			diff_sec = (df.index.second[1] - df.index.second[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'q' or str(fq) == 'Q' or str(fq) == 'QS': # quaterly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == '2q' or str(fq) == '2Q' or str(fq) == 'HA': # half yearly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'y' or str(fq) == 'Y' or str(fq) == 'A' or interval is not None: # yearly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
 			ff = pd.DataFrame({ts:dates})
 			ff.set_index(ts, inplace=True)
 		return ff
 
 	def plot_nowcast(ff, fc, FORECAST_PERIOD):
 		# Create the plotly figure
-		index = ff.columns.get_loc(fc)
 		actual = go.Scatter(
 		  x=ff.index[:-FORECAST_PERIOD],
-		  y=ff.iloc[:-FORECAST_PERIOD,index],
+		  y=ff.iloc[:-FORECAST_PERIOD,0],
 		  mode = 'markers',
 		  marker = {
-			'color': '#FF0000',
-			'size': 2,
+			'color': '#fffaef',
+			'size': 1,
 			'line': {
-			  'color': '#FF0000',
-			  'width': 3
+			  'color': '#000000',
+			  'width': .15
 			}
 		  },
 		  name = 'Actual'
@@ -163,11 +76,10 @@ class EMModel():
 
 		nowcast = go.Scatter(
 		x=ff.index[-FORECAST_PERIOD:],
-		  y=ff.iloc[-FORECAST_PERIOD:, index],
-		  mode = 'markers',
+		  y=ff.iloc[-FORECAST_PERIOD:,0],
+		  mode = 'lines',
 		  marker = {
-		'color': '#3bbed7',
-		'size': 4,
+		'color': '#3bbed7'
 		  },
 		  line = {
 			'width': 3
@@ -179,7 +91,7 @@ class EMModel():
 
 		layout = dict(
 			title="Nowcast vs Historical Values for the dataset",
-				xaxis=dict(title=f"{ff.index.name}", ticklen=5, zeroline=False),
+				xaxis=dict(title="Time", ticklen=5, zeroline=False),
 				yaxis=dict(title=f'{fc}', ticklen=5, zeroline=False),
 		)
 
@@ -189,7 +101,6 @@ class EMModel():
 
 
 	def nowcast(df, ts, fc, period:int, fq:str, forecast_window, select_model):
-
 		ff_df = EMModel.make_future_df(df, ts, period, fq)
 		model = EMModel.get_stats_model(str(select_model)) # 'em'
 

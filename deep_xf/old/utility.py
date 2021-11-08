@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 06/10/2021
 Helper and Utility functions for forecasting model pipeline
-Version: 0.0.5
+Version: 0.0.3
 """
 from math import sqrt
 from sklearn.model_selection import train_test_split
@@ -133,8 +133,6 @@ class Helper:
 			"rnn": Forecasting_Models.RNNModel,
 			"lstm": Forecasting_Models.LSTMModel,
 			"gru": Forecasting_Models.GRUModel,
-			"birnn": Forecasting_Models.BiRNNModel,
-			"bigru": Forecasting_Models.BiGRUModel,
 			"cnn": Forecasting_Models.CNNModel,
 			"deepcnn": Forecasting_Models.DeepCNNModel,
 			
@@ -213,13 +211,8 @@ class Helper:
 	# 	dates = dates[:period]  # Return correct number of periods 
 	# 	return pd.Dataframe({ts:dates})
 
-	def make_future_df(df, ts, period:int, fq:str):
-		#last_date = df.index.max()
-		#dates = pd.date_range(start=last_date, periods=period + 1, freq=fq)
-		#assert dates == dates
-		digit = ''.join(filter(str.isdigit, str(fq)))
-		interval = int(digit)
-		if str(fq) == 'h' or str(fq) == 'H' or interval is not None:  # hourly
+	def make_future_df(df, ts, period:int, fq:str): #ts
+		if str(fq) == 'h' or str(fq) == 'H':  #hourly
 			#last_date = df[ts].max()
 			last_date = df.index.max()
 			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
@@ -227,70 +220,11 @@ class Helper:
 			dates = dates[:period]  # Return correct number of periods
 			ff = pd.DataFrame({ts:dates})
 			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'm' or str(fq) == 'M' or interval is not None: # monthly
+		elif str(fq) == 'm' or str(fq) == 'M': #monthly
 			last_date = df.index.max()
 			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
 			dates = dates[dates > last_date]  # Drop start if equals last_date
 			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'd' or str(fq) == 'D' or interval is not None: # daily
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'w' or str(fq) == 'W' or interval is not None: # weekly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[1:period+1]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'min' or str(fq) == 'MIN' or interval is not None: # minute
-			last_date = df.index.max()
-			diff_min = (df.index.minute[1] - df.index.minute[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 's' or str(fq) == 'S' or interval is not None: # second
-			last_date = df.index.max()
-			diff_sec = (df.index.second[1] - df.index.second[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'n' or str(fq) == 'N' or interval is not None: # millisecond
-			last_date = df.index.max()
-			diff_sec = (df.index.second[1] - df.index.second[0])
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'q' or str(fq) == 'Q' or str(fq) == 'QS': # quaterly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == '2q' or str(fq) == '2Q' or str(fq) == 'HA': # half yearly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
-			ff = pd.DataFrame({ts:dates})
-			ff.set_index(ts, inplace=True)
-		elif str(fq) == 'y' or str(fq) == 'Y' or str(fq) == 'A' or interval is not None: # yearly
-			last_date = df.index.max()
-			dates = pd.date_range(start=last_date, periods=period + 1, freq=fq) # Add 1 incase last date is included
-			dates = dates[dates > last_date]  # Drop start if equals last_date
-			dates = dates[:period]  # Return correct number of periods
 			ff = pd.DataFrame({ts:dates})
 			ff.set_index(ts, inplace=True)
 		return ff
@@ -475,7 +409,6 @@ class Helper:
 		fig = dict(data=data, layout=layout)
 		iplot(fig)
 
-	# plot only user provided time-window
 	def plot_forecast(ff_result, fc):
 		# Create the plotly figure
 		data = []
@@ -494,50 +427,8 @@ class Helper:
 		
 		layout = dict(
 			title="Forecast for the user provided time period",
-			xaxis=dict(title=f"{ff_result.index.name}", ticklen=5, zeroline=False),
+			xaxis=dict(title="Time", ticklen=5, zeroline=False),
 			yaxis=dict(title=f"{fc}", ticklen=5, zeroline=False),
-		)
-
-		fig = dict(data=data, layout=layout)
-		iplot(fig)
-
-	def plot_forecast_complete(ff, fc, FORECAST_PERIOD):
-		# Create the plotly figure
-		index = ff.columns.get_loc(fc)
-		actual = go.Scatter(
-		  x=ff.index[:-FORECAST_PERIOD],
-		  y=ff.iloc[:-FORECAST_PERIOD,index],
-		  mode = 'markers',
-		  marker = {
-			'color': '#FF0000',
-			'size': 1,
-			},
-			line= {
-			  'width': 2
-			},
-		  name = 'Actual'
-		)
-
-		forecast = go.Scatter(
-		x=ff.index[-FORECAST_PERIOD:],
-		  y=ff.iloc[-FORECAST_PERIOD:, index],
-		  mode = 'markers',
-		  marker = {
-		'color': '#3bbed7',
-		'size': 1,
-		  },
-		  line = {
-			'width': 2
-		  },
-		  name = 'Forecast',
-		)
-
-		data = [actual, forecast]
-
-		layout = dict(
-			title="Forecast vs Historical Values for the dataset",
-				xaxis=dict(title=f"{ff.index.name}", ticklen=5, zeroline=False),
-				yaxis=dict(title=f'{fc}', ticklen=5, zeroline=False),
 		)
 
 		fig = dict(data=data, layout=layout)
@@ -547,7 +438,7 @@ class Helper:
 		# Create the plotly figure
 		actual = go.Scatter(
 		  x=ff.index[:-FORECAST_PERIOD],
-		  y=ff.loc[:-FORECAST_PERIOD,fc],
+		  y=ff.iloc[:-FORECAST_PERIOD,0],
 		  mode = 'markers',
 		  marker = {
 			'color': '#fffaef',
@@ -562,7 +453,7 @@ class Helper:
 
 		nowcast = go.Scatter(
 		x=ff.index[-FORECAST_PERIOD:],
-		  y=ff.loc[-FORECAST_PERIOD:,fc],
+		  y=ff.iloc[-FORECAST_PERIOD:,0],
 		  mode = 'lines',
 		  marker = {
 		'color': '#3bbed7'
@@ -577,8 +468,8 @@ class Helper:
 
 		layout = dict(
 			title="Nowcast vs Historical Values for the dataset",
-				xaxis=dict(title=f"{ff.index.name}", ticklen=5, zeroline=False),
-				yaxis=dict(title=f"{fc}", ticklen=5, zeroline=False),
+				xaxis=dict(title="Time", ticklen=5, zeroline=False),
+				yaxis=dict(title="Value", ticklen=5, zeroline=False),
 		)
 
 		fig = dict(data=data, layout=layout)

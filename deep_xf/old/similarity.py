@@ -3,7 +3,7 @@
 @author: Ajay Arunachalam
 Created on: 13/10/2021
 Goal: Filtered and Original Raw Time-series data Similarity with Siamese Neural Network using keras
-Version: 0.0.5
+Version: 0.0.3
 """
 
 import pandas as pd

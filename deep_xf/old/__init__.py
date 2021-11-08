@@ -20,75 +20,57 @@ from .similarity import *
 
 #################################################################################
 module_type = 'Running' if  __name__ == "__main__" else 'Imported'
-version_number = '0.0.5'
+version_number = '0.0.4'
 print(f"""{module_type} DeepXF version:{version_number}. Example call by using:
 
-******************   SET FORECAST MODEL/BASE CONFIGURATIONS   ********************
+***********************   SET MODEL/BASE CONFIGURATIONS   ************************
 
-# select algorithms, scaler, etc.
 select_model, select_user_path, select_scaler, forecast_window = Forecast.set_model_config(select_model='rnn', select_user_path='./forecast_folder_path/', select_scaler='minmax', forecast_window=1)
 
 ----------------------------------------------------------------------------------
 
-# set variables
-ts, fc = Forecast.set_variable(ts='Datetime', fc='PJME_MW')
-
-# get variables
 model_df, orig_df = Helper.get_variable(df, ts, fc)
 
 ----------------------------------------------------------------------------------
 
-# set hyperparameters
 hidden_dim, layer_dim, batch_size, dropout, n_epochs, learning_rate, weight_decay = Forecast.hyperparameter_config(hidden_dim=64,layer_dim = 3, batch_size=64, dropout = 0.2, n_epochs = 30, learning_rate = 1e-3, weight_decay = 1e-6)
 
-----------------------------------------------------------------------------------
+**********************   DEEP LEARNING BASED FORECASTING   ***********************
 
-*****************   Calling DEEP LEARNING BASED FORECASTING   *********************
-
-# train selected deep learning model
 opt, scaler = Forecast.train(df=df_full_features, target_col='value', split_ratio=0.2, select_model=select_model, select_scaler=select_scaler, forecast_window=forecast_window, batch_size=batch_size, hidden_dim=hidden_dim, layer_dim=layer_dim,dropout=dropout, n_epochs=n_epochs, learning_rate=learning_rate, weight_decay=weight_decay)
 
 ----------------------------------------------------------------------------------
 
-# forecast for the user provided window
-forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='1h', select_scaler=select_scaler,)
+forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='h', select_scaler=select_scaler,)
 
 ---------------------------------------------------------------------------------
 
-# model interpretation
-Helper.explainable_forecast(df_full_features, ff_full_features_, fc, specific_prediction_sample_to_explain=df.shape[0]+2, input_label_index_value=0, num_labels=1)
+Helper.explainable_forecast(df_full_features, ff_full_features_, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
 
 
 ******************   DYNAMIC FACTOR MODEL BASED NOWCASTING   *********************
 
-# select algorithms, scaler, etc.
 select_model, select_user_path, select_scaler, forecast_window = Forecast.set_model_config(select_model='em', select_user_path='./forecast_folder_path/', select_scaler='minmax', forecast_window=5)
 
 ----------------------------------------------------------------------------------
 
-# train nowcasting model with EM-algorithm
-nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='1h', forecast_window=forecast_window, select_model=select_model)
+nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='h', forecast_window=forecast_window, select_model=select_model)
 
 ----------------------------------------------------------------------------------
 
-# get interpretable results
-EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=df.shape[0]+2, input_label_index_value=0, num_labels=1)
+EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
 
 ***********************   DENOISING TIMESERIES ECG SIGNALS   **********************
 
-# set thresholds
 fs, order, cutoff_high, cutoff_low, powerline, nyq = Denoise.set_parameters(fs = 500, order = 5, cutoff_high = 0.5, cutoff_low = 2, powerline = 60)
-
-# filter noise and save output
 Denoise.plot_and_write(ecg_signal_data, featurecol_index=2, fs=fs, cutoff_high=cutoff_high, cutoff_low=cutoff_low, nyq = nyq, powerline=powerline, order=order)
 
 
 ***********************   TIMESERIES ECG SIGNAL SIMILARITY   **********************
 
-# configure, and train siamese neural network
-sm = Siamese.Siamese_Model(5) # 5 - # number of features
+sm = Siamese.Siamese_Model(5) #5 - #number of features
 sm.compile(loss='mse', optimizer='adam', metrics=['mse', 'mae', 'mape', 'cosine'])
-score = sm(inputs=[np.array(activity_input_sequence_1), np.array(activity_input_sequence_2)]) # signal similarity scores
+score = sm(inputs=[np.array(activity_input_sequence_1), np.array(activity_input_sequence_2)]) #timeseries sequence1   #timeseries sequence2
 
 """)
 

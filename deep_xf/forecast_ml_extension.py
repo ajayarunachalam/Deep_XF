@@ -4,7 +4,7 @@
 @author: Ajay Arunachalam
 Created on: 23/10/2021
 Goal: Deep Explainable Forecasting with State-Of-the-Networks for Time-series data - RNN, LSTM, GRU, BiRNN, SNN, GNN, Transformers, GAN, FFNN, etc
-Version: 0.0.3
+Version: 0.0.5
 """
 
 import torch
