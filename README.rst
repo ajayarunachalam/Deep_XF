@@ -1,5 +1,7 @@
-DeepXF: Explainable Forecasting and Nowcasting with State-of-the-art Deep Neural Networks and Dynamic Factor Model; Also, verify TS signal similarities and Filtering of TS signals with single line of code at ease
-============================================================================================================================================================
+DeepXF: Explainable Forecasting and Nowcasting with State-of-the-art Deep Neural Networks and Dynamic Factor Model
+==================================================================================================================
+Also, verify TS signal similarities and Filtering of TS signals with single line of code at ease
+================================================================================================
 
 **deep-xf**
 
@@ -31,19 +33,19 @@ The library provides (not limited too):-
 
 - Feature engineering with services like generating time lags, date-time features, one-hot encoding, date-time cyclic features, etc.
 
-- ** Finding similarity between homogeneous time-series inputs with Siamese Neural Networks.**
+- **Finding similarity between homogeneous time-series inputs with Siamese Neural Networks.**
 
-- ** Denoising time-series input signals. **
+- **Denoising time-series input signals.**
 
-- ** Building Deep Forecasting Model with hyperparameters tuning and leveraging available computational resource (CPU/GPU). **
+- **Building Deep Forecasting Model with hyperparameters tuning and leveraging available computational resource (CPU/GPU).**
 
-- ** Forecasting model performance evaluation with several key metrics ** 
+- **Forecasting model performance evaluation with several key metrics** 
 
-- ** Game theory based method to interpret forecasting model results. **
+- **Game theory based method to interpret forecasting model results.**
 
-- ** Building Nowcasting model with Expectation–maximization algorithm **
+- **Building Nowcasting model with Expectation–maximization algorithm**
 
-- ** Explainable Nowcasting **
+- **Explainable Nowcasting**
 
 
 Who can use deep-xf?
@@ -145,7 +147,7 @@ Example Illustration
 
     __author__ = 'Ajay Arunachalam'
     __version__ = '0.0.1'
-    __date__ = '21.10.2021'
+    __date__ = '7.11.2021'
 
 
 	from deep_xf.main import *
@@ -164,7 +166,7 @@ Example Illustration
 	# get variables
 	model_df, orig_df = Helper.get_variable(df, ts, fc)
 	# EDA
-	ExploratoryDataAnalysis.plot_dataset(df=model_df,title='PJM East (PJME) Region: estimated energy consumption in Megawatts (MW)')
+	ExploratoryDataAnalysis.plot_dataset(df=model_df,fc=fc, title='PJM East (PJME) Region: estimated energy consumption in Megawatts (MW)')
 	# Feature Engg
 	df_full_features = Features.generate_date_time_features_hour(model_df, ['hour','month','day','day_of_week','week_of_year'])
 	# generating cyclic features
@@ -205,7 +207,7 @@ Example Illustration
 
     __author__ = 'Ajay Arunachalam'
     __version__ = '0.0.1'
-    __date__ = '25.10.2021'
+    __date__ = '7.11.2021'
 
 	from deep_xf.main import *
 	from deep_xf.dpp import *
