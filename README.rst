@@ -1,5 +1,5 @@
-DeepXF: Explainable Forecasting and Nowcasting with State-of-the-art Deep Neural Networks and Dynamic Factor Model 
-==================================================================================================================
+DeepXF: Explainable Forecasting and Nowcasting with State-of-the-art Deep Neural Networks and Dynamic Factor Model; Also, verify TS signal similarities and Filtering of TS signals with single line of code at ease
+============================================================================================================================================================
 
 **deep-xf**
 
@@ -17,7 +17,7 @@ About deep-xf
 
 `DeepXF` is conceived and developed by Ajay Arunachalam - https://www.linkedin.com/in/ajay-arunachalam-4744581a/
 
-Please Note:- This is still by large a work in progress, so always open to your comments and things you feel to be included. Also, if you want to be a contributor, you are always most welcome. The RNN/LSTM/GRU/BiRNN/BiLSTM/BiGRU are already part of the initial version implementation, while the latter ones (SNN, GNN, Transformers, GAN, CNN, etc.) are work in progress, and will be added soon once the testing is completed. 
+Please Note:- This is still by large a work in progress, so always open to your comments and things you feel to be included. Also, if you want to be a contributor, you are always most welcome. The RNN/LSTM/GRU/BiRNN/BiLSTM/BiGRU are already part of the initial version roll-out, while the latter ones (SNN, GNN, Transformers, GAN, CNN, etc.) are work in progress, and will be added soon once the testing is completed. 
 
 
 The library provides (not limited too):-
@@ -133,7 +133,7 @@ Getting started
 	opt, scaler = Forecast.train(df=df_full_features, target_col='value', split_ratio=0.2, select_model=select_model,              select_scaler=select_scaler, forecast_window=forecast_window, batch_size=batch_size, hidden_dim=hidden_dim, layer_dim=layer_dim,dropout=dropout, n_epochs=n_epochs, learning_rate=learning_rate, weight_decay=weight_decay)
 
 	# forecast for user selected period
-	forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='h', select_scaler=select_scaler,)
+	forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='1h', select_scaler=select_scaler,)
 
 	# interpret the forecasting result
 	Helper.explainable_forecast(df_full_features, ff_full_features_, fc, specific_prediction_sample_to_explain=df_full_features.shape[0]+2, input_label_index_value=0, num_labels=1)
@@ -147,14 +147,7 @@ Example Illustration
     __version__ = '0.0.1'
     __date__ = '21.10.2021'
 
-	import torch
-	import pandas as pd
-	import numpy as np
-	import matplotlib.pyplot as plt
-	from datetime import datetime
-	import io
-	device = "cuda" if torch.cuda.is_available() else "cpu"
-	print(f"{device}" " is available.")
+
 	from deep_xf.main import *
 	from deep_xf.dpp import *
 	from deep_xf.forecast_ml import *
@@ -187,9 +180,9 @@ Example Illustration
 
 	opt, scaler = Forecast.train(df=df_full_features, target_col='value', split_ratio=0.2, select_model=select_model,              select_scaler=select_scaler, forecast_window=forecast_window, batch_size=batch_size, hidden_dim=hidden_dim, layer_dim=layer_dim,dropout=dropout, n_epochs=n_epochs, learning_rate=learning_rate, weight_decay=weight_decay)
 
-	forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='h', select_scaler=select_scaler,)
+	forecasted_data, ff_full_features, ff_full_features_ = Forecast.forecast(model_df, ts, fc, opt, scaler, period=25, fq='1h', select_scaler=select_scaler,)
 
-	Helper.explainable_forecast(df_full_features, ff_full_features_, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
+	Helper.explainable_forecast(df_full_features, ff_full_features_, fc, specific_prediction_sample_to_explain=df.shape[0]+1, input_label_index_value=0, num_labels=1)
 
 -  **NOWCASTING DEMO:**
 
@@ -199,10 +192,10 @@ Example Illustration
 	select_model, select_user_path, select_scaler, forecast_window = Forecast.set_model_config(select_model='em', select_user_path='./forecast_folder_path/', select_scaler='minmax', forecast_window=5)
 
 	# nowcast for user selected window
-	nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='h', forecast_window=forecast_window, 	select_model=select_model)
+	nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='1h', forecast_window=forecast_window, 	select_model=select_model)
 
 	# interpret the nowcasting model result
-	EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
+	EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=df.shape[0]+2, input_label_index_value=0, num_labels=1)
 
 
 Example Illustration
@@ -214,14 +207,6 @@ Example Illustration
     __version__ = '0.0.1'
     __date__ = '25.10.2021'
 
-	import torch
-	import pandas as pd
-	import numpy as np
-	import matplotlib.pyplot as plt
-	from datetime import datetime
-	import io
-	device = "cuda" if torch.cuda.is_available() else "cpu"
-	print(f"{device}" " is available.")
 	from deep_xf.main import *
 	from deep_xf.dpp import *
 	from deep_xf.forecast_ml import *
@@ -243,8 +228,8 @@ Example Illustration
 	df_full_features = Features.generate_cyclic_features(df_full_features, 'month', 12, 1)
 	df_full_features = Features.generate_cyclic_features(df_full_features, 'week_of_year', 52, 0)
 	df_full_features = Features.generate_other_related_features(df=df_full_features)
-	nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='h', forecast_window=forecast_window, select_model=select_model)
-	EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=145370, input_label_index_value=0, num_labels=1)
+	nowcast_full_data, nowcast_pred_data = EMModel.nowcast(df_full_features, ts, fc, period=5, fq='1h', forecast_window=forecast_window, select_model=select_model)
+	EMModel.explainable_nowcast(df_full_features, nowcast_pred_data, fc, specific_prediction_sample_to_explain=df.shape[0]+3, input_label_index_value=0, num_labels=1)
 
 Tested Demo
 ===========
