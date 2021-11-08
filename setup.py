@@ -13,7 +13,7 @@ except ImportError:
     from distutils.core import setup
 
 
-__version__ = '0.0.4'
+__version__ = '0.0.5'
 
 def readme():
     with open('README.rst', 'r', encoding='utf-8') as f:
@@ -24,7 +24,7 @@ setup(
     name='deep_xf',
     version=__version__,
     packages=["deep_xf"],
-    description='DEEPXF - An open-source, low-code explainable forecasting and nowcasting library with state-of-the-art deep neural networks and Dynamic Factor Model.',
+    description='DEEPXF - An open-source, low-code explainable forecasting and nowcasting library with state-of-the-art deep neural networks and Dynamic Factor Model. Now available with additional addons like Denoising TS signals with ensembling of filters, TS signal similarity test with Siamese Neural Networks',
     long_description = readme(),
     long_description_content_type="text/markdown",
     url='https://github.com/ajayarunachalam/Deep_XF',
