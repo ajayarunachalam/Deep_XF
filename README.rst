@@ -9,6 +9,8 @@ pypi: https://pypi.org/project/deep_xf
 
 .. image:: images/logo.png
 
+**Related Blog:** https://towardsdatascience.com/interpretable-nowcasting-with-deepxf-using-minimal-code-6b16a76ca52f
+
 
 About deep-xf
 =============
