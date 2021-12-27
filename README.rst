@@ -11,6 +11,11 @@ pypi: https://pypi.org/project/deep_xf
 
 **Related Blog:** https://towardsdatascience.com/interpretable-nowcasting-with-deepxf-using-minimal-code-6b16a76ca52f
 
+**Related Blog:** https://medium.com/analytics-vidhya/building-explainable-forecasting-models-with-state-of-the-art-deep-neural-networks-using-a-ad3fa5844fef
+
+**Related Blog:** https://towardsdatascience.com/learning-similarities-between-biomedical-signals-with-deep-siamese-network-7684648e2ba0
+
+**Related Blog:** https://ajay-arunachalam08.medium.com/denoising-ecg-signals-with-ensemble-of-filters-65919d15afe9
 
 About deep-xf
 =============
