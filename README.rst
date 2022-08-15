@@ -81,6 +81,7 @@ Requirements
 -  Pandas[>=0.23.0]
 -  Matplotlib
 -  Seaborn[0.9.0]
+-  plotly[5.10.0]
 -  tqdm
 -  shap
 -  keras[2.6.0]
