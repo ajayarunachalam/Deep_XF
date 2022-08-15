@@ -42,6 +42,7 @@ setup(
         "torch",
         "shap==0.39.0",
         "py-ecg-detectors",
+        "plotly==5.10.0",
     ],
     license='MIT',
     include_package_data=True,
