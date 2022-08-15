@@ -16,6 +16,7 @@ tqdm
 # Viz libs
 matplotlib
 seaborn==0.9.0
+plotly==5.10.0
 pandas_profiling
 py-ecg-detectors [--user]
 
