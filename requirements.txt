@@ -26,7 +26,7 @@ statsmodels==0.12.2
 
 
 # model interpretation library
-shap==0.39.0
+shap
 
 # dl frameworks
 torch
